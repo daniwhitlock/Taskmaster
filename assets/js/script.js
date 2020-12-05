@@ -44,6 +44,10 @@ var saveTasks = function() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 };
 
+$("#modalDueDate").datepicker({
+  minDate: 1
+});
+
 // enable draggable/sortable feature on list-group elements
 $(".card .list-group").sortable({
   // enable dragging across lists
@@ -165,7 +169,7 @@ $(".list-group").on("click", "p", function() {
 });
 
 // editable field was un-focused
-$(".list-group").on("blur", "textarea", function() {
+$(".list-group").on("change", "input[type='text']", function() {
   // get current value of textarea
   var text = $(this).val();
 
@@ -173,7 +177,7 @@ $(".list-group").on("blur", "textarea", function() {
   var status = $(this)
     .closest(".list-group")
     .attr("id")
-    .replace("list-", "");
+    .replace("list-group", "");
   var index = $(this)
     .closest(".list-group-item")
     .index();
@@ -203,8 +207,18 @@ $(".list-group").on("click", "span", function() {
     .attr("type", "text")
     .addClass("form-control")
     .val(date);
+
   $(this).replaceWith(dateInput);
 
+  //enable jquery ui datepicker
+  dateInput.datepicker({
+    minDate:1,
+    onClose: function() {
+      //when calendar is closed, force a "change" event on the 'DateInput'
+      $(this).trigger("change");
+    }
+  });
+  
   // automatically bring up the calendar
   dateInput.trigger("focus");
 });
