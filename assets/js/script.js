@@ -169,7 +169,7 @@ $(".list-group").on("click", "p", function() {
 });
 
 // editable field was un-focused
-$(".list-group").on("change", "input[type='text']", function() {
+$(".list-group").on("blur", "textarea", function() {
   // get current value of textarea
   var text = $(this).val();
 
@@ -177,7 +177,7 @@ $(".list-group").on("change", "input[type='text']", function() {
   var status = $(this)
     .closest(".list-group")
     .attr("id")
-    .replace("list-group", "");
+    .replace("list-", "");
   var index = $(this)
     .closest(".list-group-item")
     .index();
@@ -207,18 +207,13 @@ $(".list-group").on("click", "span", function() {
     .attr("type", "text")
     .addClass("form-control")
     .val(date);
-
   $(this).replaceWith(dateInput);
 
   //enable jquery ui datepicker
   dateInput.datepicker({
-    minDate:1,
-    onClose: function() {
-      //when calendar is closed, force a "change" event on the 'DateInput'
-      $(this).trigger("change");
-    }
+    minDate: 1
   });
-  
+
   // automatically bring up the calendar
   dateInput.trigger("focus");
 });
